@@ -1,5 +1,5 @@
 const corsOption = {
-    origin:'http://localhost:5173',
+    origin:'https://social-front-six.vercel.app',
     methods:'OPTIONS,GET,PUT,POST,PATHCH,DELETE',
     allowedHeaders:'Content-Type,Authorization',
     credentials:true,

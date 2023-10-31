@@ -49,10 +49,10 @@ const logIn = async (request,response,next)=>{
         },process.env.REFRESH_TOKEN_SECRET,{expiresIn:'7d'});
         response.cookie('refreshjwt',refreshToken,{
             path:'/',
-            httpOnly:true,
+            httpOnly: true,
+            sameSite:'none',
             secure:true,
-            samesite:'none',
-            maxAge : 7 * 60 * 60 * 60 * 1000
+            maxAge:7 * 24 * 60 * 60 * 1000,
         });
 
         response.status(200).json({
