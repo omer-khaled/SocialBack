@@ -17,7 +17,6 @@ import messageRouter from './routes/message.js';
 import path from 'path';
 import dirname from './utils/path.js';
 import likeRouter from './routes/likes.js';
-import expressStaticGzip from 'express-static-gzip';
 const app = express();
 
 app.use(compression());
@@ -25,13 +24,6 @@ app.use(cors(corsOption));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/images',express.static(path.join(dirname,'images')));
-app.use(
-    '/',
-    expressStaticGzip('path/to/your/build/directory', {
-      enableBrotli: true,
-      orderPreference: ['br', 'gz'],
-    })
-);
 
 app.use('/auth',authRouter);
 app.use('/post',postRouter);

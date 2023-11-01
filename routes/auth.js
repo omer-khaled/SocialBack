@@ -4,10 +4,10 @@ import uploader from '../utils/uploader.js';
 import { body } from "express-validator";
 import bcrypt from 'bcrypt';
 import db from "../utils/dbConnection.js";
-import verifyToken from "../utils/verfiyToken.js";
+import CompressImage from "../utils/CompressImage.js";
 const authRouter = Router();
 
-authRouter.post('/signup',uploader.single('image'),[
+authRouter.post('/signup',uploader.single('image'),CompressImage,[
     body('name').isString().trim().isLength({min:3}).withMessage('name should be at leaste 3 character'),
     body('email').normalizeEmail().isEmail().withMessage('invalid email').custom(async(value,{req})=>{
         try{
@@ -41,5 +41,7 @@ authRouter.post('/login',[
 ],authController.logIn);
 
 authRouter.get('/refresh',authController.refresh);
+
+authRouter.get('/refreshGetUseInfo',authController.refreshGetUseInfo);
 
 export default authRouter;

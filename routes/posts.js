@@ -4,6 +4,7 @@ import uploader from '../utils/uploader.js';
 import { body,param, query } from "express-validator";
 import verifyToken from "../utils/verfiyToken.js";
 import dotenv from 'dotenv';
+import CompressImage from "../utils/CompressImage.js";
 dotenv.config();
 const postRouter = Router();
 
@@ -20,12 +21,12 @@ postRouter.post('/createPost',verifyToken,uploader.single('image'),[
     body('content').isString().isLength({min:3}).withMessage('content should at leaste 3 characters')
 ],postController.createPost);
 
-postRouter.post('/createPostInGroup/:groupid',verifyToken,uploader.single('image'),[
+postRouter.post('/createPostInGroup/:groupid',verifyToken,uploader.single('image'),CompressImage,[
     body('content').isString().isLength({min:3}).withMessage('content should at leaste 3 characters'),
     param('groupid').isNumeric().matches(/^\d+$/).withMessage('id should be numric')
 ],postController.createPostinGroup);
 
-postRouter.put('/updatePost/:id',verifyToken,uploader.single('image'),[
+postRouter.put('/updatePost/:id',verifyToken,uploader.single('image'),CompressImage,[
     body('content').isString().isLength({min:3}).withMessage('content should at leaste 3 characters'),
     param('id').isNumeric().matches(/^\d+$/).withMessage('id should be numric')
 ],postController.updatePost);
