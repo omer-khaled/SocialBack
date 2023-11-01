@@ -189,7 +189,7 @@ const getUserInfo = async(request,response,next)=>{
         const comments = (await db.execute(`select count(comments.id) from comments join posts on posts.id=comments.postId join users on users.id=comments.userId where posts.userId=${userId} and comments.seen=false`))[0][0]['count(comments.id)'];
         const likes = (await db.execute(`select count(likes.id) from likes join posts on posts.id=likes.postId join users on users.id=likes.userId where posts.userId=${userId} and likes.seen=false`))[0][0]['count(likes.id)'];
         const notifcations = (likes+comments);
-        const message = (await db.execute(`select count(messages.senderId) from (select DISTINCT senderId from message where reciverId=${userId} and seen=false) as messages`))[0][0]['count(messages.senderId)'];
+        const message = (await db.execute(`select messages.senderId from (select DISTINCT senderId from message where reciverId=${userId} and seen=false) as messages`))[0];
         response.status(200).json({
             status:true,
             user:{...user,messages:message,numberOfFriends:friendNumber||0,NumberOfPosts:postsNumber||0,notifications:notifcations},

@@ -12,7 +12,7 @@ const getMessage =async (request,response,next)=>{
         }
         const {friendId} = request.params;
         const userId = request.userId;
-        (await db.execute(`update message set seen=true where reciverId=${userId} and seen=false`))[0];
+        (await db.execute(`update message set seen=true where reciverId=${userId} and senderId=${friendId} and seen=false`))[0];
         const messages = (await db.execute(`select * from message where (senderId=${userId} or senderId=${friendId}) and (reciverId=${userId} or reciverId=${friendId}) order by createdAt asc`))[0];
         response.status(200).json({
             status:true,
@@ -148,15 +148,18 @@ const seeMessage =async (request,response,next)=>{
         }
         const userId = request.userId;
         const {id} = request.params;
-        (await db.execute(`update message set seen=true where id=${id}`))[0];
+        const message = (await db.execute(`select * from message where id=${id}`))[0][0];
+        await db.execute(`update message set seen=true where id=${id}`);
         socket.getIO().emit(`messages/${userId}`,{
-                action:'delete'
+                action:'delete',
+                message:message
             }
         )
         response.status(201).json({
             status:true,
         })
     } catch (e) {
+        console.log(e);
         return handleErorr(e.message||'server error',500,next,null);
     }
 }

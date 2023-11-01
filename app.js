@@ -47,8 +47,8 @@ app.use(errorHandling);
 const server = app.listen(3002);
 const io = socket.init(server);
 io.on('connection',()=>{
-    console.log('websocket connected');
+    // console.log('websocket connected');
 });
 io.off('connection',()=>{
-    console.log('disconected');
+    // console.log('disconected');
 });
